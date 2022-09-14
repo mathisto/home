@@ -3,8 +3,10 @@ source ~/dotfiles/functions
 source ~/dotfiles/aliases
 source ~/dotfiles/paths
 
+export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
+export PATH="/Applications/Emacs.app/Contents/MacOS:$PATH"
 export TERM="xterm-256color"
-export PATH="$HOME/.emacs.d/bin:/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 
 eval "$(mcfly init zsh)"
