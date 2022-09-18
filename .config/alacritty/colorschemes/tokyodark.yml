@@ -25,5 +25,5 @@ colors:
     background: '#11121d'
     foreground: '#a0a8cd'
   selection:
-    background: '#11121d'
-    text: '#a0a8cd'
+    background: '#a485dd'
+    text: '#06080a'

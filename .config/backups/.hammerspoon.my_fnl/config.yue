@@ -1,0 +1,120 @@
+import helpers
+
+hs.loadSpoon 'Hyper'
+
+Quantum = spoon::Hyper -- Bear with me, its worth it.
+App = hs::application
+-- The "Quantum Key"
+-- A push-to-toggle rocket booster from hell.
+-- I have my bound to CapsLock on hold (and esc when pressed alone)
+-- 1. "Hyper" was taken long ago by the REDONKULOUS Ctrl+Option+Cmd+Shift combo.
+-- 2. This modifier lives in another plane of existence from your normal,
+-- run of the mill modifiers of yesteryear. Now, the only theing preventing
+-- you from using all 24 modified hyper-layers is a 6th finger.
+Quantum\bindHotKeys { hyperKey: { {}, 'F19'} }
+
+-- Let's bind a key using a non-existant, but highly desireable,
+-- declaractive API using the implicit object notation from Yuescript
+-- With a config this simple, we should be able to make this type
+-- of workflow customization available to more people.
+
+--- Hyper:bindPassThrough(key, bundleId) -> hs.hotkey.modal
+--- Method
+--- Ensures the bundleId's application is running, then sends the "hyper-chord"
+--- (⌘+⌥+⌃+⇧) plus whatever you set as `key`.
+---
+--- Returns:
+---  * self
+--- Quantum:bindPassThrough('.', 'com.culturedcode.ThingsMac')
+
+-- Hyper:bind({}, 'j', function()
+--   App.launchOrFocusByBundleID('net.kovidgoyal.kitty')
+-- end)
+
+QuantumBindings =
+  a: -> Launch 'Activity Monitor'
+  b: -> Launch BROWSER
+  c: -> Launch CALENDAR
+  d: -> Launch DATA
+  e: -> Launch EDITOR
+  f: -> Launch FILE_MANAGER
+  i: -> Launch TERMINAL
+  m: -> Launch MAIL
+  n: -> Launch 'Notion Enhanced'
+  o: -> Launch NOTES
+  s: -> Launch 'Slack'
+  v: -> Launch 'Neovide'
+  x: -> Launch 'Emacs'
+  y: -> Launch MUSIC
+  z: -> Launch VIDEO_CHAT
+  shift:
+    h: 'yabai left windwo'
+    j: 'yabai down windwo'
+    k: 'yabai up windwo'
+    l: 'yabai right windwo'
+  fn:
+  ctrl:
+  option:
+  command:
+    a: -> DirectoryLaunch '~/Applications/'
+    b: -> Launch 'Bitwarden'
+    d: -> Launch 'Discord'
+    f: -> Launch 'Finder'
+    h: -> OpenWithApp '/Users/mathisto/.hammerspoon', EDITOR
+    i: -> Launch 'Terminal'
+    m: -> Launch 'Messages'
+    p: -> TypePass "bigbraid"
+    n: -> Launch 'Numi'
+    r: -> Launch REST_CLIENT
+    t: -> Launch 'Toggl Track'
+    v: -> Launch 'OBS'
+    z: -> Launch 'zoom.us'
+  space: -> Launch 'Alfred 5'
+-- Quantum:bind({}, 'return', nil, autolayout.autoLayout)
+
+Applications = {
+  editor:
+    * name: "Neovide"
+      mods: { 'cmd' }
+    * name: "Emacs.app"
+  terminal:
+    * "Alacritty"
+    * "iTerm2"
+    * "Terminal.app"
+  browser:
+    * "Vivaldi"
+    * "qutebrowser"
+    * "Firefox"
+    * "Safari"
+  media:
+    * "ytfzf"
+    * "Youtube"
+    * "Spotify"
+  notes:
+    * "Logseq"
+    * "Obsidian"
+  calendar:
+    * "Fantastical"
+    * "Google Calendar"
+  data_explorer:
+    * "DataGrip"
+  file_manger:
+    * "Finder"
+    * "NNN"
+  mail:
+    * "Spark"
+    * "Gmail"
+  rest_client:
+    * "Insomnia"
+    * "Postman"
+  video_conferencing:
+    * "Google Meet"
+    * "zoom.us"
+    * "Teams"
+  chat:
+    * "Discord"
+    * "Slack"
+  vim_gui:
+    * "Neovide"
+    * "gvim"
+}

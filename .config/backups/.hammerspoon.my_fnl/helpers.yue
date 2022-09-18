@@ -1,0 +1,53 @@
+local^ -- local vars by default, Captialize vars are exported
+
+Launch = (appname)->
+  hs.application.launchOrFocus(appname)
+  Hyper.triggered = true
+
+HyperFunction = (func)->
+  return nil if func == nil
+  func!
+  Hyper:exit!
+
+FileExists = (file)-> hs.fs.attributes(file)
+
+DirectoryLaunch = (dir)-> hs.execute("open " .. dir)
+
+OpenWithApp = (file, app)->
+    local appleScript = 'tell application "' .. app .. '" to open "' .. file .. '"'
+    hs.osascript.applescript(appleScript)
+    hs.application.launchOrFocus(app)
+
+Secrets = (filename)->
+    if FileExists(filename)?
+      settings.set("secrets", json.read(filename))
+    else
+      HammerLog.i("You need to create a file at " .. filename)
+
+TypePass = ->
+    secret_pass = hs.settings.get("secrets")["p"]
+    appleScript = [[
+      tell application "System Events"
+        delay 0.3
+        keystroke "$SecretPass"
+      end tell
+    ]]
+    script = appleScript:gsub('$SecretPass', secret_pass)
+    hs.osascript.applescript script
+
+JumpToTab = (url)->
+  hs.osascript.javascript([[
+(function() {
+  var vivaldi = Application('Vivaldi');
+  vivaldi.activate();
+  for (win of vivaldi.windows()) {
+    var tabIndex =
+      win.tabs().findIndex(tab => tab.url().match(/]] .. url .. [[/));
+    if (tabIndex != -1) {
+      win.activeTabIndex = (tabIndex + 1);
+      win.index = 1;
+    }
+  }
+})();
+    ]])
+end

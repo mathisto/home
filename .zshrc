@@ -1,19 +1,28 @@
-source ~/dotfiles/env_var
-source ~/dotfiles/functions
-source ~/dotfiles/aliases
-source ~/dotfiles/paths
+# An JS flavored import directive to source files tersley with builtin existential check
+function import () { [[ -f "$1" ]] && source "$1" } # i.e. `import .env` 
 
-export PATH="$HOME/.emacs.d/bin:$PATH"
-export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
-export PATH="/Applications/Emacs.app/Contents/MacOS:$PATH"
-export TERM="xterm-256color"
-export ZSH="$HOME/.oh-my-zsh"
+import ~/dotfiles/env_vars
 
-eval "$(mcfly init zsh)"
+plugins=(
+  npm 
+  zsh-autosuggestions 
+  zsh-syntax-highlighting 
+  zsh-interactive-cd 
+  asdf 
+  fzf 
+  zfm
+  vi-mode 
+  emacs
+)
+import $ZSH/oh-my-zsh.sh
 
-plugins=(npm zsh-autosuggestions cd asdf fzf vi-mode emacs)
-source $ZSH/oh-my-zsh.sh
+import $ZSH/custom/plugins/iterm-tab-colors/zsh-tab-colors.plugin.zsh
 
 eval "$(starship init zsh)"
 
+# Id like to start amassing meaningful quotes, not just random ones.
+# Lets find a solution and show it on zsh exec
 
+import ~/dotfiles/paths
+import ~/dotfiles/functions
+import ~/dotfiles/aliases

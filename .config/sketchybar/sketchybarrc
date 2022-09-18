@@ -1,222 +1,153 @@
-#!/usr/bin/env sh
+#                          ﱦ 齃     ﮂ  ﵁ 爵        ﭵ     ﱦ  ﰊ 異 ﴱ אַ  'Y⃣'
 
-ACTIVE_THEME="tokyonight" #Coresponds to global color defs in ~/.config/colors/themename.sh
+source "$HOME/.config/colors/tokyodark.sh" # Loads all defined colors
 
-source "$HOME/.config/colors/tokyonight.sh"
-source "$HOME/.config/sketchybar/icons.sh" # Loads all defined icons
+############## BAR ##############
+sketchybar --bar height=42 \
+                 y_offset=0 \
+                 blur_radius=0 \
+                 position=top \
+                 padding_left=0 \
+                 padding_right=0 \
+                 margin=0 \
+                 corner_radius=0 \
+                 color=$BLACK \
+                 shadow=on
 
-ITEM_DIR="$HOME/.config/sketchybar/items" # Directory where the items are configured
-PLUGIN_DIR="$HOME/.config/sketchybar/plugins" # Directory where all the plugin scripts are stored
+############## GLOBAL DEFAULTS ##############
+sketchybar --default updates=when_shown \
+                     icon.font="Liga SFMono Nerd Font:Regular:16.0" \
+                     icon.color=$WHITE \
+                     icon.highlight_color=$RED \
+                     label.font="Montserrat Alternates:ExtraBold:16.0" \
+                     label.color=$WHITE \
+                     background.corner_radius=0 \
+                     background.height=30
 
-FONT="Metropolis" # Needs to have Regular, Bold, Semibold, Heavy and Black variants
-ICON_FONT="Lexsa"
+sketchybar --add item logo left \
+           --set logo icon= \
+                 icon.color=$BLACK \
+                 icon.padding_left=16 \
+                 icon.padding_right=16 \
+                 background.color=$PURPLE \
+                 background.padding_right=8 \
+                 background.padding_left=4 \
+                 click_script="sketchybar --update"
 
-PADDINGS=3 # All paddings use this value (icon, label, background and bar paddings)
-SEGMENT_SPACING=13 # The spacing between segments
+SPACE_ICONS=("1" "2" "3" "4" "5")
+SPACES=()
 
-# Set up github notifications and drop down menu
-# https://github.com/FelixKratz/SketchyBar/discussions/12?sort=new#discussioncomment-2025720
-# sketchybar --add       item               github.bell left                         \
-#            --set       github.bell        associated_space=1                       \
-#                                           update_freq=180                          \
-#                                           icon.font="$ICON_FONT:Bold:30"              \
-#                                           icon=G                                  \
-#                                           label=$LOADING                           \
-#                                           script="$PLUGIN_DIR/gitNotifications.sh" \
-#                                           click_script="sketchybar --set \$NAME popup.drawing=toggle"
+for i in "${!SPACE_ICONS[@]}"
+do
+  sid=$(($i+1))
+  SPACES+=(space.$sid)
+  sketchybar --add space space.$sid left \
+             --set space.$sid associated_space=$sid \
+                              icon=${SPACE_ICONS[i]} \
+                              icon.padding_left=20 \
+                              icon.padding_right=20 \
+                              icon.highlight_color=$RED \
+                              background.padding_left=-4 \
+                              background.padding_right=-4 \
+                              background.color=$BLACK \
+                              background.drawing=on \
+                              label.drawing=off \
+                              click_script="yabai -m space --focus $sid"
+done
 
-# Setting up the general bar appearance and default values
-sketchybar --bar     height=32                                           \
-                     corner_radius=0                                     \
-                     border_width=0                                     \
-                     margin=0                                            \
-                     blur_radius=0                                       \
-                     position=top                                        \
-                     padding_left=4                                      \
-                     padding_right=4                                     \
-                     color=$BAR_COLOR                                    \
-                     topmost=off                                         \
-                     sticky=on                                           \
-                     font_smoothing=on                                  \
-                     y_offset=0                                          \
-                     notch_width=0                                       \
-                                                                         \
-           --default drawing=on                                          \
-                     updates=when_shown                                  \
-                     label.font="$FONT:Regular:16.0"                     \
-                     icon.font="$ICON_FONT:Regular:20"                         \
-                     icon.color=$ICON_COLOR                              \
-                     label.color=$LABEL_COLOR                            \
-                     icon.padding_left=$PADDINGS                         \
-                     icon.padding_right=$PADDINGS                        \
-                     label.padding_left=$PADDINGS                        \
-                     label.padding_right=$PADDINGS                       \
-                     background.padding_right=$PADDINGS                  \
-                     background.padding_left=$PADDINGS                   \
+sketchybar --add item space_separator left \
+           --set space_separator icon= \
+                                 background.padding_left=23 \
+                                 background.padding_right=23 \
+                                 label.drawing=off \
+                                 icon.color=$RED
 
-# Template for the segment labels, i.e. space name, active app, date, ...
-sketchybar --add item           label_template left                          \
-           --set label_template icon.drawing=off                             \
-                                label.font="$FONT:Regular:18.0"                \
-                                label.padding_right=5                        \
-                                click_script="$PLUGIN_DIR/toggle_bracket.sh" \
-                                background.padding_left=$SEGMENT_SPACING     \
-                                drawing=off
+sketchybar --add item window_title left \
+           --set window_title    script="~/.config/sketchybar/plugins/window_title.sh" \
+                                 icon.drawing=off \
+                                 label.color=$PURPLE \
+           --subscribe window_title front_app_switched
+
+############## ITEM DEFAULTS ###############
+sketchybar --default label.padding_left=6 \
+                     label.padding_right=6 \
+                     icon.padding_left=6 \
+                     icon.padding_right=6 \
+                     icon.font="Liga SFMono Nerd Font:Regular:16.0" \
+                     background.height=30 \
+                     background.padding_right=4 \
+                     background.padding_left=4 \
+                     background.corner_radius=0
+
+sketchybar --add item spot_logo center \
+           --set spot_logo icon= \
+                           label.drawing=off \
+                           icon.color=$BLACK \
+                           background.color=0xffEDC4E5
 
 
-# Spaces themselves are this
-source "$ITEM_DIR/spaces.sh"
+sketchybar --add item spot center \
+           --set spot update_freq=1 \
+                      icon.drawing=off \
+                      updates=on \
+                      script="~/.config/sketchybar/plugins/spotifyIndicator.sh" \
+                      background.color=$BLACK \
+                      background.padding_left=0
 
-# First Seperator on the bar
-sketchybar   --add item       separator left                          \
-             --set separator  icon=|                                  \
-                              icon.font="$ICON_FONT:Bold:30" \
-                              background.padding_left=-2              \
-                              background.padding_right=-7             \
-                              icon.y_offset=1                         \
-                              label.drawing=off                       \
-                              icon.color=$RED
+############## RIGHT ITEMS ##############
+sketchybar --add item time right \
+           --set time update_freq=1 \
+                      icon.drawing=off \
+                      script="~/.config/sketchybar/plugins/time.sh" \
+                      background.color=$BLACK \
+                      background.padding_left=0
 
-# BSP/float/stack/fullscreen text
- sketchybar --add       event        window_focus                      \
-           --add       item         system.yabai left                 \
-           --set       system.yabai script="$PLUGIN_DIR/yabai.sh"     \
-                                    icon.font="$ICON_FONT:Regular:14"       \
-                                    label.drawing=off                 \
-                                    icon.color=$GREEN                 \
-                                    icon.y_offset=1                   \
-                                    icon.padding_left=8               \
-                                    updates=on                        \
-           --subscribe system.yabai window_focus mouse.clicked        \
+sketchybar --add item time_logo right\
+           --set time_logo icon= \
+                           label.drawing=off \
+                           icon.color=$BLACK \
+                           label.drawing=off \
+                           background.color=$ORANGE
 
-# Second seperator on the bar
-sketchybar   --add item       separator2 left                          \
-             --set separator2  icon=                                 \
-                              icon.font="$ICON_FONT:Regular:30" \
-                              background.padding_right=0             \
-                              background.padding_left=-3                \
-                              icon.y_offset=1                   \
-                              label.drawing=off                       \
-                              icon.color=$YELLOW
-# Space number
-source "$ITEM_DIR/spacenum.sh"
+sketchybar --add item date right \
+           --set date update_freq=1000 \
+                      icon.drawing=off \
+                      script="~/.config/sketchybar/plugins/date.sh" \
+                      background.color=$BLACK \
+                      background.padding_left=0
 
-# Third seperator on the bar
-sketchybar   --add item       separator3 left                          \
-             --set separator3  icon=|                                  \
-                              icon.font="$ICON_FONT:Regular:30" \
-                              background.padding_right=-5             \
-                              icon.y_offset=1                   \
-                              label.drawing=off                       \
-                              icon.color=$WHITE                     \
+sketchybar --add item clock_logo right\
+           --set clock_logo icon= \
+                            icon.color=$BLACK\
+                            label.drawing=off \
+                            background.color=$BLUE
 
-# Curent procces name
-sketchybar --add       event        window_focus                         \
-           --add       event        title_change                         \
-                                                                         \
-           --add       item         window_title left                    \
-           --set       window_title script="$PLUGIN_DIR/window_title.sh" \
-                                    label.font="$FONT:Regular:11"               \
-                                    label.y_offset=1                       \
-           --subscribe window_title window_focus title_change           \
+sketchybar --add item battery right \
+           --set battery update_freq=3 \
+                         icon.drawing=off \
+                         script="~/.config/sketchybar/plugins/power.sh" \
+                         background.color=$BLACK \
+                         background.padding_left=0
 
-# Time Widget
-sketchybar --add item clock right                                                 \
-           --set clock update_freq=5                                             \
-                       icon=""                                                  \
-                       icon.font="$ICON_FONT:Regular:30"                      \
-                       icon.padding_right=7                                          \
-                       icon.color=$BLUE                                        \
-                       icon.y_offset=2                                          \
-                       label.y_offset=2                                          \
-                       label.font="$FONT:Bold:14"                           \
-                       label.color=$BLUE                                       \
-                       label.padding_left=0                                       \
-                       label.padding_right=8                                      \
-                       background.color=$BLUE                           \
-                       background.height=3                                       \
-                       background.padding_right=3                                \
-                       background.y_offset=-10                                       \
-                       script="$PLUGIN_DIR/clock.sh"                              \
-                       icon.padding_left=0 label.padding_right=1                  \
+sketchybar --add item power_logo right \
+           --set power_logo icon= \
+                 icon.color=$BLACK \
+                 label.drawing=off \
+                 background.color=$GREEN
 
-# Battery Widget
-sketchybar --add item battery right                                                 \
-           --set battery update_freq=10                                             \
-                       icon.font="$ICON_FONT:Regular:30"                      \
-                       icon.padding_right=7                                          \
-                       icon.color=$YELLOW                                        \
-                       icon.y_offset=2                                          \
-                       label.y_offset=2                                          \
-                       label.font="$FONT:Bold:14"                           \
-                       label.color=$YELLOW                                       \
-                       label.padding_right=8                                      \
-                       background.color=$YELLOW                            \
-                       background.height=3                                       \
-                       background.y_offset=-10                                       \
-                       background.padding_right=7                                \
-                       script="$PLUGIN_DIR/battery.sh"                              \
-                       icon.padding_left=0 label.padding_right=0                  \
+sketchybar --add item net right \
+           --set net script="~/.config/sketchybar/plugins/net.sh" \
+                     icon.drawing=off \
+                     background.color=$BLACK \
+                     background.padding_left=0
 
-# Updates Widget
-sketchybar --add item updates right                                                 \
-           --set updates update_freq=1800                                             \
-                       icon=""                                                  \
-                       icon.font="$ICON_FONT:Regular:23"                      \
-                       icon.padding_right=7                                          \
-                       icon.color=$MAGENTA         \
-                       icon.y_offset=1                                          \
-                       label.y_offset=2                                          \
-                       label.font="$FONT:Bold:14"                           \
-                       label.color=$MAGENTA \
-                       label.padding_right=8                                      \
-                       background.color=$MAGENTA                            \
-                       background.height=3                                       \
-                       background.y_offset=-10                                       \
-                       background.padding_right=7                                \
-                       script="$PLUGIN_DIR/package_monitor.sh"                              \
-                       icon.padding_left=-1 label.padding_right=2                  \
-# Uptime Widget
-sketchybar --add item uptime right                                                 \
-           --set uptime update_freq=50                                             \
-                       icon.font="$ICON_FONT:Regular:18"                      \
-                       icon.padding_right=4                                          \
-                       icon.color=$GREEN                                        \
-                       label.y_offset=2                                          \
-                       icon.y_offset=3                                          \
-                       label.font="$FONT:Bold:14"                           \
-                       label.color=$GREEN                                       \
-                       label.padding_right=8                                      \
-                       background.color=$GREEN                            \
-                       background.height=3                                       \
-                       background.y_offset=-10                                       \
-                       background.padding_right=7                                \
-                       script="$PLUGIN_DIR/uptime.sh"                              \
-                       icon.padding_left=-1 label.padding_right=2                  \
+sketchybar --add item net_logo right \
+           --set net_logo icon=\
+                     icon.color=$BLACK\
+                     label.drawing=off \
+                     background.color=$RED
 
-# mem Widget
-sketchybar --add item  mem right                                                 \
-           --set mem   update_freq=10                                             \
-                       icon.font="$ICON_FONT:Regular:30"                      \
-                       icon.padding_right=4                                          \
-                       icon.color=$RED                                        \
-                       icon.y_offset=2                                          \
-                       label.y_offset=2                                         \
-                       label.font="$FONT:Bold:14"                                  \
-                       label.color=$RED                                   \
-                       label.padding_right=8                                      \
-                       background.color=$RED                           \
-                       background.height=3                                       \
-                       background.y_offset=-10                                       \
-                       background.padding_right=7                                \
-                       script="$PLUGIN_DIR/disk.sh"                              \
-                       icon.padding_left=0 label.padding_right=2                  \
-
-# If an update is avalible, update sketchybar when launched
+############## FINALIZING THE SETUP ##############
 sketchybar --update
 
-# Finalize animations
-sketchybar --animate sin 30 --bar notch_width=200
-
-# Notify when sketchybarrc is finished loading
-echo "sketchybar configuation loaded.."
+echo "sketchybar configuration loaded..."
