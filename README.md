@@ -8,3 +8,25 @@ Next up. Kmonad and its replacement of or interface with skhd.
 
 Dots being maintained by [yadm](https://yadm.io/)
 
+# Tooling Required
+- `brew install karabiner-elements`
+- `brew install yabai`
+- `brew install sketchybar`
+- `brew install neovim --HEAD`
+
+
+# Keybindings
+First things first. Lets get keybinding taken care of.
+You've heard of the hyper key, yes? Boring. Miopic. Parochial. Today we launch into outerspace on the back of a Kwantum mode.
+## karabiner-elements
+
+### keymapping sanity: RESTORED 
+#### courtesy of [yqrashawn's]() most exquisite [goku](https://github.com/yqrashawn/GokuRakuJoudo)
+
+```edn
+;; ~/.config/karabiner/karabiner.edn
+
+
+```
+
+## Hammerspoon

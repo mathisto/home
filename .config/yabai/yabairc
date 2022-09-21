@@ -17,7 +17,7 @@ yabai -m config window_opacity             off
 yabai -m config window_opacity_duration    0
 yabai -m config active_window_opacity      1
 yabai -m config normal_window_opacity      1
-yabai -m config window_border_width        2
+yabai -m config window_border_width        3
 yabai -m config window_animation_duration  0
 yabai -m config active_window_border_color $RED
 yabai -m config normal_window_border_color $BLACK
@@ -29,16 +29,17 @@ yabai -m config mouse_action1              move
 yabai -m config mouse_action2              resize
 yabai -m config mouse_drop_action          swap
 
-yabai -m config top_padding                4
-yabai -m config bottom_padding             4
-yabai -m config left_padding               4
-yabai -m config right_padding              4
-yabai -m config window_gap                 4
+yabai -m config top_padding                2
+yabai -m config bottom_padding             2
+yabai -m config left_padding               2
+yabai -m config right_padding              2
+yabai -m config window_gap                 6
 # Do not manage some apps which are not resizable
 yabai -m rule --add app="^(Calculator|VLC|System Preferences|zoom.us|Photo Booth|Archive Utility|Python)$" manage=off
 
 # ===== Rules ==================================
 
+yabai -m rule --add label="Hammerspoon" app="^Hammerspoon$" manage=off
 yabai -m rule --add label="Steam" app="^Steam$" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Alfred" app="^Alfred$" manage=off
@@ -60,13 +61,4 @@ yabai -m space 5 --label term
 
 yabai -m config layout                     bsp
 
-echo "Yabai is '˜\”*°•.˜\”*°• Window Management by... •°*\”˜.•°*\”˜'
-echo "\n \
-   :::   :::   :::     :::::::::      :::     ::::::::::: \n \
-  :+:   :+: :+: :+:   :+:    :+:   :+: :+:       :+:      \n \
-  +:+ +:+ +:+   +:+  +:+    +:+  +:+   +:+      +:+       \n \
-  +#++: +#++:++#++: +#++:++#+  +#++:++#++:     +#+        \n \
-  +#+  +#+     +#+ +#+    +#+ +#+     +#+     +#+         \n \
- #+#  #+#     #+# #+#    #+# #+#     #+#     #+#          \n \
-###  ###     ### #########  ###     ### ###########" | lolcat
-
+echo "Yabai has entered the building..."

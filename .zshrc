@@ -18,6 +18,7 @@ import $ZSH/oh-my-zsh.sh
 
 import $ZSH/custom/plugins/iterm-tab-colors/zsh-tab-colors.plugin.zsh
 
+eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 
 # Id like to start amassing meaningful quotes, not just random ones.

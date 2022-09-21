@@ -1,96 +1,107 @@
-;; edn spec https://github.com/edn-format/edn
-{;;;; define things
- ;; define devices
- :devices {:hhkb-bt [{:vendor_id 1278 :product_id 51966}]
-           :hhkb [{:vendor_id 2131 :product_id 256}]}
+{
+;; ----------------------------------
+;; this is my goku file for karabiner
+;; ----------------------------------
+;; more info about goku: https://github.com/yqrashawn/GokuRakuJoudo
+;; more info about karabiner: https://karabiner-elements.pqrs.org/docs
+;; ----------------------------------
+;; article karabiner god mode by nikita: https://medium.com/@nikitavoloboev/karabiner-god-mode-7407a5ddc8f6
+;; examples: https://github.com/yqrashawn/GokuRakuJoudo/blob/master/examples.org#profiles-wip
+;; tutorial: https://github.com/yqrashawn/GokuRakuJoudo/blob/master/tutorial.md#basic8
+;; another article: https://blog.jkl.gg/hacking-your-keyboard/
+;; very well documented edn file by Kaushik Gopal: https://gist.github.com/kaushikgopal/ff7a92bbc887e59699c804b59074a126
+;; key names: https://github.com/yqrashawn/GokuRakuJoudo/blob/master/src/karabiner_configurator/keys_info.clj
 
- ;; define application identifiers
- :applications {:chrome ["^com\\.google\\.Chrome$"]
-                :chrome-canary [ "^com\\.google\\.Chrome\\.canary$"]
-                :chromes ["^com\\.google\\.Chrome$" "^com\\.google\\.Chrome\\.canary$"]}
+:profiles {
+    :Default {
+        :default    true
+        :sim        50      ;; if keydown event for two different keys are pressed within :sim ms, the keypresses are considered simultaneous
+        :delay      500     ;; after :delay ms, the key press is considered to be delayed (TODO WHAT IS THIS??)
+        :alone      1000    ;; if keyup event comes within :alone ms from keydown, the key is not just pressed but held
+        :held       500     ;; key is fired twice when :held ms is elapsed (otherwise seen as a hold command) (TODO WHAT IS THIS??)
+    }
+} ;; profiles
+;; you can create templates for running shell commands. These follow clojure string template syntax.
+:templates {:echo "echo \"%s\""
+            :hs "open -g hammerspoon://%s"
+            :km "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+            :btt "osascript -e 'tell application \"BetterTouchTool\" to trigger_named \"%s\"'"
+            :set_letterToFind_var "osascript -e 'tell application \"Keyboard Maestro Engine\" to setvariable \"letterToFind\" to \"%s\"'"
+            :set_last_action_var "osascript -e 'tell application \"Keyboard Maestro Engine\" to setvariable \"last_action\" to \"%s\"'"
+            :open "open \"%s\""
+             :sh         "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH %s"
+             :yabai      "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH yabai -m %s"
+             :km         "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"%s\"'"
+             :open       "open \"%s\""
+             :opena      "open -a \"%s\""
+             :hs         "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH hs -A -n -q -t 0.1 -c '(\"%s\")'"
+             :hsl        "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH hs -A -n -q -t 0.1 -c 'hs.application.launchOrFocus(\"%s\")'"
+             :show       "osascript -e 'set appName to \"%s\"\nset startIt to false\ntell application \"System Events\"\n  if not (exists process appName) then\n    set startIt to true\n  else\n    set frontmost of process appName to true\n  end if\nend tell\nif startIt then\n  tell application appName to activate\nend if'\n"
+             :togg       "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH hs -A -n -q -t 0.1 -c '\nlocal appName = \"%s\";\nlocal x = hs.application.find(appName);\nif x and x:isFrontmost() then\n  x:hide();\nelse\n  hs.application.launchOrFocus(appName);\nend'"
+             :yfocus     "sh ~/.config/yabai/focus-window %s"
+             :toggle     "osascript -e 'set appName to \"%s\"\nset startIt to false\ntell application \"System Events\"\n  if not (exists process appName) then\n    set startIt to true\n  else if frontmost of process appName then\n    set visible of process appName to false\n  else\n    set frontmost of process appName to true\n  end if\nend tell\nif startIt then\n  tell application appName to activate\nend if'"
+             :type       "osascript -e 'tell application \"System Events\" to keystroke \"%s\" as text'"
+             :jump       "export PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH yabai -m window --focus $(yabai -m query --windows | jq 'map(select(.app == \"%s\")) | first | .id') || hs -A -n -q -t 0.1 -c 'hs.application.launchOrFocus(\"%s\")'"
+             ;; :focus      "yabai -m display --focus \"%s\" & yabai -m space --focus \"%s\""
+            :summon "open -a \"%s\""}
 
- :input-sources {:squirrel {:input_mode_id "com.googlecode.rimeime.inputmethod.Squirrel"
-                            :input_source_id "com.googlecode.rimeime.inputmethod.Squirrel.Rime"
-                            :language "zh-Hans"}
-                 :us {:input_mode_id ""
-                      :input_source_id "com.apple.keylayout.US"
-                      :language "en"}}
+:layers    
+  {:tab-mode {:key :tab :afterup [{:set ["yabai-scale-mode" 0]}
+                                  {:set ["yabai-toggle-mode" 0]}
+                                  {:set ["yabai-warp-mode" 0]}
+                                  {:set ["spec-mode" 0]}]
+  :yabai-scale-mode      {:key :c :condi [:tab-mode :!yabai-warp-mode :!yabai-config-mode]}
+  :yabai-warp-mode       {:key :r :condi [:tab-mode :!yabai-config-mode :!yabai-scale-mode]}
+  :yabai-config-mode     {:key :f :condi [:tab-mode :!yabai-warp-mode :!yabai-warp-mode]}}
 
- :templates {:launch "osascript -e 'tell application \"Alfred 3\" to run trigger \"launch%s\" in workflow \"yqrashawn.workflow.launcher\" with argument \"\"'"}
- ;; define alias for modifers
- :modifiers {:11 [:left_command :left_control]
-             :111 [:left_command :left_control :left_option]
-             :1111 [:left_command :left_control :left_option :left_shift]
-             :ccos [:left_command :left_control :left_option :left_shift]
-             :11111 [:fn :left_command :left_control :left_option :left_shift]
-             :spacebar-modifier {:mandatory [:left_command :left_control] :optional [:left_shift]}
-             :fn&lcommand&lcontrol&loption&lshift [:fn :left_command :left_control :left_option :left_shift]}
-
- ;; define froms
- ;; use in <from>
- :froms {:1 {:key :d}
-         :2 {:key :d :modi :1}
-         :3 {:key :d :modi :left_command}
-         :4 {:key :d :modi [:left_command :right_shift]}
-         :5 {:key :d :modi {:mandatory [:left_command :right_shift]}}
-         :6 {:key :d :modi {:mandatory [:left_command :right_shift]
-                            :optional [:caps_lock]}}
-         :7 {:ckey :display_brightness_decrement}
-         :8 {:ckey :display_brightness_decrement :modi :left_command}
-         :9 {:pkey :button4 :modi :left_command}
-         :10 {:sim [:a :b] :modi :left_command}
-         :11 {:sim [:a :b]
-              :simo {:interrupt true
-                     :dorder :insensitive}
-              :modi :left_command}}
-
- ;; define tos
- ;; use in <to>
- :tos {:macos-defin {:key :d :modifiers [:left_command :left_control]}
-       :alf--search-help "osascript -e 'tell application \"Alfred 3\" to run trigger \"helpSearch\" in workflow \"com.tedwise.menubarsearch\" with argument \"\"'"}
-
- ;;;; helper function to generate things little bit quicker
- ;; quick define "layers" or "state" feature(use set_variable)
- ;; can use as conditions in rule list
- ;; {:<layer name> {:from <froms>}}
- :simlayers {:vi-mode {:key :d}}
- :simlayer-threshold 250
-
- ;; main list
- :main
- ;; [<from> <to>] or
- ;; [<from> <to> <conditions>] or
- ;; [<from> <to> <conditions> <other options>]
- ;; <from> can be keywords defined in froms or keycodes without `{:not-from true}`
- ;; <to> can be keywords defined in tos, keycodes without `{:not-to true}`, string (shell script)
- ;; <conditions> can be keywords defined in layers, devices, applications
- ;; <other options> {:other {:parameters {:to_delayed_action_delay_milliseconds 100 :basic.to_if_alone_timeout_milliseconds 500 :basic.to_if_held_down_threshold_milliseconds 250}} }
- [{:des "a to 1" :rules [[:a :1]]} ;; a to 1
-  {:des "command a to control 1" :rules [:!Ca :!T1]} ;; command a to control 1
-  {:des "my spacebar to control 1" :rules [:my-spacebar :!T1]} ;; my-spacebar to control 1
-  {:des "press b to insert 12" :rules [:b [:1 :2]]}  ;; key to key
-  {:des "c to example osascript" :rules [:c "osascript -e 'display dialog \"example apple script\"'"]} ;; key to shell script
-  {:des "d to 1 then example osascript" :rules [:d [:1 "osascript -e 'display dialog \"example apple script\"'"]]} ;; key to key then shell script
-  {:des "simultaneous e f to 3" :rules [[:e :f] :3]} ;; simultaneous key to key
-  {:des "g to 4 when variable vi-mode is 1" :rules [:g :4 :vi-mode]} ;; vi-mode is 1
-  {:des "h to 5 when variable vi-mode is not 1" :rules [:h :5 :!vi-mode]} ;; vi-mode is 0
-  {:des "i to 6 only for device hhkb-bt" :rules [:i :6 :hhkb-bt]} ;; key to key in layer b (in layer a) specific to hhkb-bt device
-  {:des "j to 7 on hhkb-bt when variable vi-mode is 1" :rules [:j :7 [:vi-mode :hhkb-bt]]} ;; multiple condition
-  {:des "press h insert 8 then set variable some-mode to 0" :rules [:h [:8 {:set ["some-mode" 0]}]]}] ;; h to 8 and set_variable
-
- ;; code won't read cheatsheet section
- ;; ! stand for mandatory
- ;; # stand for optional
- ;; C T O S for left command control optional shift
- ;; F for fn
- ;; need to prefix C T O S F with ! or #
- :cheatsheet {:!Ca "command a" ;; mandatory left_command
-              :!Ta "control a" ;; mandatory left_control
-              :!Oa "option a"
-              :!Sa "shift a"
-              :#Sa "shift a" ;; keycode a, optional left_shift
-              :!CTOa "command control option a"
-              :!Cspacebar "command space"
-              :!Fa "fn a"
-              :##a "keycode a optional any"
-              :!!a "mandatory hyper(control command option shift) a "}}
+;; This is where you define the modifications
+:main 
+  [
+             {:des   "yabai mode"
+              :rules [;; move windows
+                      :yabai-warp-mode
+                      [:h [:yabai "window --warp west"]]
+                      [:j [:yabai "window --warp south"]]
+                      [:k [:yabai "window --warp north"]]
+                      [:l [:yabai "window --warp east"]]
+                      [:n [:yabai "window --warp next"]]
+                      [:p [:yabai "window --warp prev"]]
+                      ;; scale windows
+                      :yabai-scale-mode
+                      [:h "~/.config/yabai/resize left"]
+                      [:j "~/.config/yabai/resize down"]
+                      [:k "~/.config/yabai/resize up"]
+                      [:l "~/.config/yabai/resize right"]
+                      :yabai-config-mode
+                      [:spacebar [:yabai "window --toggle float"]]
+                      :tab-mode
+                      [:hyphen "launchctl kickstart -k \"gui/${UID}/homebrew.mxcl.yabai\""]
+                      [:!Thyphen "~/.config/yabai/rules && ~/.config/yabai/set-layout-based-on-display"]
+                      [:7 "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH brew services stop yabai"]
+                      [:8 "PATH=/run/current-system/sw/bin:/opt/homebrew/bin:/usr/local/bin:$PATH brew services start yabai"]
+                      ;; focus mode
+                      [:h [:sh "/opt/homebrew/bin/yabai -m window --focus west || /opt/homebrew/bin/yabai -m window --focus $(/opt/homebrew/bin/yabai -m query --windows --display west | /run/current-system/sw/bin/jq 'map(select(.\"is-visible\" == true and .\"is-sticky\" == false)) | sort_by(.frame.x, .frame.y) | first | .id')"]]
+                      [:j [:sh "/opt/homebrew/bin/yabai -m window --focus south || /opt/homebrew/bin/yabai -m window --focus $(/opt/homebrew/bin/yabai -m query --windows --display south | /run/current-system/sw/bin/jq 'map(select(.\"is-visible\" == true and .\"is-sticky\" == false)) | sort_by(.frame.y, .frame.x) | first | .id')"]]
+                      [:k [:sh "/opt/homebrew/bin/yabai -m window --focus north || /opt/homebrew/bin/yabai -m window --focus $(/opt/homebrew/bin/yabai -m query --windows --display north | /run/current-system/sw/bin/jq 'map(select(.\"is-visible\" == true and .\"is-sticky\" == false)) | sort_by(.frame.x, .frame.y) | first | .id')"]]
+                      [:l [:sh "/opt/homebrew/bin/yabai -m window --focus east || /opt/homebrew/bin/yabai -m window --focus $(/opt/homebrew/bin/yabai -m query --windows --display east | /run/current-system/sw/bin/jq 'map(select(.\"is-visible\" == true and .\"is-sticky\" == false)) | sort_by(.frame.x, .frame.y) | first | .id')"]]
+                      ;; [:spacebar "yabai -m window --focus prev"]
+                      [:n [:yabai "space --focus next"]]
+                      [:p [:yabai "space --focus prev"]]
+                      ;; yabai workspace
+                      ;; [:1 [:yabai "space --focus 1"]]
+                      ;; [:2 [:yabai "space --focus 2"]]
+                      ;; [:3 [:yabai "space --focus 3"]]
+                      ;; [:4 [:yabai "space --focus 4"]]
+                      ;; [:a [:yabai "window --toggle float"]]
+                      ;; [:b [:yabai "window --toggle border"]]
+                      [:return_or_enter [:yabai "window --toggle zoom-parent"]]
+                      [:!Sb [:yabai "config layout bsp"]]
+                      [:!Ss [:yabai "config layout stack"]]
+                      [:!Sf [:yabai "config layout float"]]
+                      [:m [:yabai "window --toggle zoom-fullscreen"]]
+                      [:x [:yabai "window --close"]]
+                      [:delete_or_backspace [:yabai "window --close"]]
+                      ]
+              }
+  ]
+}
