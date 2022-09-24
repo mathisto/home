@@ -10,8 +10,7 @@ plugins=(
   zsh-interactive-cd 
   asdf 
   fzf 
-  zfm
-  vi-mode 
+  zsh-vi-mode
   emacs
 )
 import $ZSH/oh-my-zsh.sh
@@ -27,3 +26,6 @@ eval "$(starship init zsh)"
 import ~/dotfiles/paths
 import ~/dotfiles/functions
 import ~/dotfiles/aliases
+
+[ -s "/Users/mathisto/.scm_breeze/scm_breeze.sh" ] && source "/Users/mathisto/.scm_breeze/scm_breeze.sh"
+export PATH=$PATH:/Users/mathisto/.spicetify

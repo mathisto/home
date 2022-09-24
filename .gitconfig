@@ -1,5 +1,7 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+#	name = Matt Kelly
+#	email = matthew.ryan.kelly@gmail.com
 [init]
 	defaultBranch = trunk
-[user]
-	name = Matt Kelly
-	email = matthew.ryan.kelly@gmail.com

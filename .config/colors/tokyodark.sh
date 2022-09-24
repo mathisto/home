@@ -12,6 +12,7 @@ MAGENTA=0xffa485dd
 GREY=0xff414868
 CYAN=0xff28a89d
 PURPLE=0xffa485dd
+TEAL=0xff2ac3de
 TRANSPARENT=0x00000000
 
 # General bar colors

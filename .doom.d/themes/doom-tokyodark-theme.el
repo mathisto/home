@@ -6,6 +6,11 @@
 ;; Source: https://github.com/enkia/tokyo-night-vscode-theme
 ;;
 ;;; Commentary:
+;;; This is attempt to port the lovilness of tokyodark to a fully fleshed doom-theme
+;;; Starting with doomtokyo-night as base, I have pulled in all the colors from the
+;;; repo, and then used color slurp on the screen shots to get the unlisted ones.
+;;; What you are seeing is basically my personal remix of tokyodark. I call it the
+;;; collectors edition. lol.
 ;;; Code:
 
 (require 'doom-themes)
@@ -15,7 +20,7 @@
 ;;; Variables
 
 (defgroup doom-tokyodark-theme nil
-  "Options for doom-themes"
+  "Options for doom-themes."
   :group 'doom-themes)
 
 (defcustom doom-tokyodark-brighter-modeline nil
@@ -49,7 +54,7 @@
 ;; | Color&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Use |
 ;; | ---------- | ------------------------------------------------------------ |
 ;; | ![#ee6d85](https://place-hold.it/15/ee6d85/ee6d85?text=+) `#ee6d85` | This keyword, HTML elements, Regex group symbol, CSS units, Terminal Red |
-;; | ![#d7a65f](https://place-hold.it/15/d7a65f/d7a65f?text=+) `#d7a65f` | Number and Boolean constants, Language support constants |
+;; | ![#f2945a](https://place-hold.it/15/d7a65f/d7a65f?text=+) `#` | Number and Boolean constants, Language support constants |
 ;; | ![#d7a65f](https://place-hold.it/15/d7a65f/d7a65f?text=+) `#d7a65f` | Function parameters, Regex character sets, Terminal Yellow |
 ;; | ![#9ece6a](https://place-hold.it/15/9ece6a/9ece6a?text=+) `#9ece6a` | Strings, CSS class names |
 ;; | ![#95c661](https://place-hold.it/15/95c661/95c661?text=+) `#95c661` | Object literal keys, Markdown links, Terminal Green |
@@ -70,11 +75,11 @@
   ;; name        default   256       16
   ((bg         '("#11121d" nil       nil            ))
    (bg-alt     '("#06080a" nil       nil            ))
-   (base0      '("#06080a" "#06080a" "black"        ))
+   (base0      '("#464b53" "#464b53" "black"        ))
    (base1      '("#51587a" "#51587a" "brightblack"  ))
    (base2      '("#61698b" "#61698b" "brightblack"  ))
    (base3      '("#71799d" "#71799d" "brightblack"  ))
-   (base4      '("#8189af" "#8189af" "brightblack"  ))
+   (base4      '("#8193b4" "#8193b4" "brightblack"  ))
    (base5      '("#9099c0" "#9099c0" "brightblack"  ))
    (base6      '("#a0aad2" "#a0aad2" "brightblack"  ))
    (base7      '("#b0bae3" "#b0bae3" "brightblack"  ))
@@ -84,18 +89,18 @@
 
    (grey       base4)
    (red        '("#ee6d85" "#ee6d85" "red"          ))
-   (orange     '("#d7a65f" "#d7a65f" "brightred"    ))
+   (orange     '("#f2945a" "#f2945a" "brightred"    ))
    (green      '("#95c661" "#95c661" "green"        ))
-   (teal       '("#7199ee" "#7199ee" "brightgreen"  ))
+   (teal       '("#2ac3de" "#2ac3de" "brightgreen"  ))
    (yellow     '("#d7a65f" "#d7a65f" "yellow"       ))
-   (blue       '("#2ac3de" "#2ac3de" "brightblue"   ))
-   (dark-blue  '("#565f89" "#565f89" "blue"         ))
+   (blue       '("#7199ee" "#7199ee" "brightblue"   ))
+   (dark-blue  '("#3d59a1" "#3d59a1" "blue"         ))
    (magenta    '("#a485dd" "#a485dd" "magenta"      ))
-   (violet     '("#bb9af7" "#bb9af7" "purple"))
-   (cyan       '("#38a89d" "#38a89d" "brightcyan"   ))
-   (dark-cyan  '("#7dcfff" "#7dcfff" "cyan"         ))
+   (violet     '("#6946bf" "#6946bf" "purple"))
+   (cyan       '("#73daca" "#73daca" "brightcyan"   ))
+   (dark-cyan  '("#38a89d" "#38a89d" "cyan"         ))
    ; Additional custom colors
-   (dark-green '("#9ece6a" "#9ece6a" "green"        ))
+   (dark-green '("#485e30" "#485e30" "green"        ))
    (brown      '("#cfc9c2" "#cfc9c2" "yellow"       ))
 
    ;; face categories -- required for all themes
@@ -184,7 +189,7 @@
    (ivy-minibuffer-match-face-4 :foreground yellow :background bg-alt)
 
    ;;; Elscreen
-   (elscreen-tab-other-screen-face :background "#353a42" :foreground "#1e2022")
+   (elscreen-tab-other-screen-face :background base0 :foreground brown)
 
    ;;; Solaire
    (solaire-mode-line-face

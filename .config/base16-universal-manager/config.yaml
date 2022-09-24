@@ -1,0 +1,9 @@
+applications:
+  alacritty:
+    enabled: true
+    files:
+      default:
+        path: ~/.config/alacritty/alacritty.yml
+        mode: replace
+        start_marker: "# <<<<<<<<<<"
+        end_marker: "# >>>>>>>>>>"
