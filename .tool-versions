@@ -1,2 +1,5 @@
 ruby 3.2.0-preview2
 python 3.9.14
+neovim ref:master
+lua 5.4.4
+luajit 2.1.0-beta3--3.4.0
